@@ -1,6 +1,7 @@
 package Elearning.vinhit.exception;
 
 import Elearning.vinhit.dto.ApiResponse;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +21,20 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> badCredential (BadCredentialsException e){
         return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
     }
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ApiResponse<?>> badCredential (RuntimeException e){
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<ApiResponse<?>> badCredential (SignatureException e){
         ApiResponse<?> apiResponse= ApiResponse
                 .builder()
-                .code(404)
+                .code(409)
+                .message(e.getMessage())
+                .build();
+        return ResponseEntity.ok(apiResponse);
+    }
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ApiResponse<?>> badCredential (JwtException e){
+        ApiResponse<?> apiResponse= ApiResponse
+                .builder()
+                .code(409)
                 .message(e.getMessage())
                 .build();
         return ResponseEntity.ok(apiResponse);

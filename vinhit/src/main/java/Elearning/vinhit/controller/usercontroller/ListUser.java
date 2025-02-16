@@ -30,6 +30,7 @@ public class ListUser {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved the user"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
+    //pathvariable /thamso{}
     public ResponseEntity<String> getUserById(@PathVariable String id) {
         return new ResponseEntity<>("User with ID " + id, HttpStatus.OK);
     }

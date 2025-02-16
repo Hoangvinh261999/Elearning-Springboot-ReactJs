@@ -1,5 +1,8 @@
 package Elearning.vinhit.security;
 import Elearning.vinhit.service.serviceImplement.UserDetailServiceImp;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +16,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.security.SignatureException;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -33,14 +35,20 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String header = request.getHeader(HEADER_STRING);
         String username=null;
 
-            if(header!=null && header.startsWith(TOKEN_PREFIX)){
-                String authToken=header.replace(TOKEN_PREFIX,"");
-                username=jwtTokenService.extractUserNameFromToken(authToken);
-            }else{
-                throw new RuntimeException("invalid");
-
+        if (header != null && header.startsWith(TOKEN_PREFIX)) {
+            try {
+                String authToken = header.replace(TOKEN_PREFIX, "");
+                username = jwtTokenService.extractUserNameFromToken(authToken);
+            } catch (SignatureException e) {
+                request.setAttribute("JWT_ERROR", "Invalid JWT signature");
+            } catch (ExpiredJwtException e) {
+                request.setAttribute("JWT_ERROR", "Token has expired");
+            } catch (JwtException e) {
+                request.setAttribute("JWT_ERROR", "Invalid JWT token");
             }
-
+        } else {
+            request.setAttribute("JWT_ERROR", "Token is missing");
+        }
 
 
         if(StringUtils.hasText(username)){

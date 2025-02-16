@@ -1,0 +1,30 @@
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+} */
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+@font-face {
+  font-family: "Rokkitt";
+  src: url("./assets/fonts/Rokkitt-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900; /* Khoảng weight hỗ trợ của font */
+  font-style: normal;
+}
+body {
+  font-family: "Rokkitt", Georgia, "Times New Roman", serif;
+  font-size: 18px; /* Kích thước font mặc định */
+  line-height: 1.5;
+}
